@@ -1,0 +1,100 @@
+@SkyRoutePlatform.API_HostAddress = http://localhost:5118
+
+### Search Flights Test
+POST {{SkyRoutePlatform.API_HostAddress}}/api/flights/search
+Content-Type: application/json
+
+{
+  "originCode": "JFK",
+  "destinationCode": "LHR",
+  "departureDate": "2026-08-15",
+  "passengers": 2,
+  "cabinClass": "Economy"
+}
+
+###
+
+### Create Booking Test
+POST {{SkyRoutePlatform.API_HostAddress}}/api/bookings
+Content-Type: application/json
+
+{
+  "flightId": "GA-101-20260815",
+  "cabinClass": "Economy",
+  "passengers": 2,
+  "fullName": "Alex Carter",
+  "email": "alex.carter@example.com",
+  "documentType": "PassportNumber",
+  "documentNumber": "X12345678"
+}
+
+###
+
+### Invalid
+POST {{SkyRoutePlatform.API_HostAddress}}/api/bookings
+Content-Type: application/json
+
+{
+  "flightId": "",
+  "cabinClass": "",
+  "passengers": 198,
+  "fullName": "Jane Smith",
+  "email": "jane@example.com",
+  "documentType": "PassportNumber",
+  "documentNumber": "J12345678"
+}
+
+###
+
+### International Booking Test (LAX to CDG)
+POST {{SkyRoutePlatform.API_HostAddress}}/api/bookings
+Content-Type: application/json
+
+{
+  "flightId": "GA-301-20260815",
+  "cabinClass": "Economy",
+  "passengers": 198,
+  "fullName": "Jane Smith",
+  "email": "jane@example.com",
+  "documentType": "PassportNumber",
+  "documentNumber": "J12345678"
+}
+
+###
+
+### Domestic Booking Test (NYC to BOS)
+POST {{SkyRoutePlatform.API_HostAddress}}/api/bookings
+Content-Type: application/json
+
+{
+  "flightId": "GA-401-20260815",
+  "cabinClass": "Economy",
+  "passengers": 1,
+  "fullName": "John Doe",
+  "email": "john@example.com",
+  "documentType": "NationalId",
+  "documentNumber": "123456789012"
+}
+
+###
+
+### Test Invalid Document Type for International Route
+POST {{SkyRoutePlatform.API_HostAddress}}/api/bookings
+Content-Type: application/json
+
+{
+  "flightId": "GA-301-20260815",
+  "cabinClass": "Economy",
+  "passengers": 1,
+  "fullName": "Bad Booking",
+  "email": "bad@example.com",
+  "documentType": "NationalId",
+  "documentNumber": "123456789012"
+}
+
+###
+
+### Get Booking Test
+GET {{SkyRoutePlatform.API_HostAddress}}/api/bookings/SKY-OUB8H4
+
+###

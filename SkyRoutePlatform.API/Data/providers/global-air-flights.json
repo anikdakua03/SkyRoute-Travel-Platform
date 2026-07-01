@@ -1,0 +1,90 @@
+[
+    {
+        "flightId": "GA-101-20260815",
+        "flightNumber": "GA101",
+        "origin": "JFK",
+        "destination": "LHR",
+        "departureTimeUtc": "2026-08-15T08:00:00Z",
+        "arrivalTimeUtc": "2026-08-15T19:30:00Z",
+        "cabin": "Economy",
+        "baseFare": 150.00,
+        "currency": "USD"
+    },
+    {
+        "flightId": "GA-102-20260815",
+        "flightNumber": "GA102",
+        "origin": "JFK",
+        "destination": "LHR",
+        "departureTimeUtc": "2026-08-15T08:30:00Z",
+        "arrivalTimeUtc": "2026-08-15T20:00:00Z",
+        "cabin": "Economy",
+        "baseFare": 160.00,
+        "currency": "USD"
+    },
+    {
+        "flightId": "GA-103-20260815",
+        "flightNumber": "GA103",
+        "origin": "JFK",
+        "destination": "LHR",
+        "departureTimeUtc": "2026-08-15T14:00:00Z",
+        "arrivalTimeUtc": "2026-08-16T01:30:00Z",
+        "cabin": "Economy",
+        "baseFare": 140.00,
+        "currency": "USD"
+    },
+    {
+        "flightId": "GA-201-20260815",
+        "flightNumber": "GA201",
+        "origin": "JFK",
+        "destination": "LHR",
+        "departureTimeUtc": "2026-08-15T09:00:00Z",
+        "arrivalTimeUtc": "2026-08-15T20:30:00Z",
+        "cabin": "Business",
+        "baseFare": 450.00,
+        "currency": "USD"
+    },
+    {
+        "flightId": "GA-301-20260815",
+        "flightNumber": "GA301",
+        "origin": "LAX",
+        "destination": "CDG",
+        "departureTimeUtc": "2026-08-15T10:00:00Z",
+        "arrivalTimeUtc": "2026-08-16T04:00:00Z",
+        "cabin": "Economy",
+        "baseFare": 320.00,
+        "currency": "USD"
+    },
+    {
+        "flightId": "GA-302-20260815",
+        "flightNumber": "GA302",
+        "origin": "LAX",
+        "destination": "CDG",
+        "departureTimeUtc": "2026-08-15T15:00:00Z",
+        "arrivalTimeUtc": "2026-08-16T09:00:00Z",
+        "cabin": "Economy",
+        "baseFare": 310.00,
+        "currency": "USD"
+    },
+    {
+        "flightId": "GA-401-20260815",
+        "flightNumber": "GA401",
+        "origin": "NYC",
+        "destination": "BOS",
+        "departureTimeUtc": "2026-08-15T07:00:00Z",
+        "arrivalTimeUtc": "2026-08-15T08:30:00Z",
+        "cabin": "Economy",
+        "baseFare": 85.00,
+        "currency": "USD"
+    },
+    {
+        "flightId": "GA-402-20260815",
+        "flightNumber": "GA402",
+        "origin": "NYC",
+        "destination": "BOS",
+        "departureTimeUtc": "2026-08-15T14:00:00Z",
+        "arrivalTimeUtc": "2026-08-15T15:30:00Z",
+        "cabin": "Economy",
+        "baseFare": 90.00,
+        "currency": "USD"
+    }
+]

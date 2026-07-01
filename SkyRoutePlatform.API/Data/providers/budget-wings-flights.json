@@ -1,0 +1,90 @@
+[
+    {
+        "flight_id": "BW-101-20260815",
+        "flight_number": "BW101",
+        "origin_code": "JFK",
+        "destination_code": "LHR",
+        "departure_time_utc": "2026-08-15T07:30:00Z",
+        "arrival_time_utc": "2026-08-15T18:30:00Z",
+        "cabin_class": "Economy",
+        "base_fare": 180.00,
+        "currency": "USD"
+    },
+    {
+        "flight_id": "BW-102-20260815",
+        "flight_number": "BW102",
+        "origin_code": "JFK",
+        "destination_code": "LHR",
+        "departure_time_utc": "2026-08-15T09:00:00Z",
+        "arrival_time_utc": "2026-08-15T20:00:00Z",
+        "cabin_class": "Economy",
+        "base_fare": 200.00,
+        "currency": "USD"
+    },
+    {
+        "flight_id": "BW-103-20260815",
+        "flight_number": "BW103",
+        "origin_code": "JFK",
+        "destination_code": "LHR",
+        "departure_time_utc": "2026-08-15T16:00:00Z",
+        "arrival_time_utc": "2026-08-16T03:00:00Z",
+        "cabin_class": "Economy",
+        "base_fare": 170.00,
+        "currency": "USD"
+    },
+    {
+        "flight_id": "BW-201-20260815",
+        "flight_number": "BW201",
+        "origin_code": "JFK",
+        "destination_code": "LHR",
+        "departure_time_utc": "2026-08-15T10:00:00Z",
+        "arrival_time_utc": "2026-08-15T21:00:00Z",
+        "cabin_class": "Business",
+        "base_fare": 520.00,
+        "currency": "USD"
+    },
+    {
+        "flight_id": "BW-301-20260815",
+        "flight_number": "BW301",
+        "origin_code": "LAX",
+        "destination_code": "CDG",
+        "departure_time_utc": "2026-08-15T11:00:00Z",
+        "arrival_time_utc": "2026-08-16T05:00:00Z",
+        "cabin_class": "Economy",
+        "base_fare": 350.00,
+        "currency": "USD"
+    },
+    {
+        "flight_id": "BW-302-20260815",
+        "flight_number": "BW302",
+        "origin_code": "LAX",
+        "destination_code": "CDG",
+        "departure_time_utc": "2026-08-15T17:00:00Z",
+        "arrival_time_utc": "2026-08-16T11:00:00Z",
+        "cabin_class": "Economy",
+        "base_fare": 330.00,
+        "currency": "USD"
+    },
+    {
+        "flight_id": "BW-401-20260815",
+        "flight_number": "BW401",
+        "origin_code": "NYC",
+        "destination_code": "BOS",
+        "departure_time_utc": "2026-08-15T06:30:00Z",
+        "arrival_time_utc": "2026-08-15T08:00:00Z",
+        "cabin_class": "Economy",
+        "base_fare": 95.00,
+        "currency": "USD"
+    },
+    {
+        "flight_id": "BW-402-20260815",
+        "flight_number": "BW402",
+        "origin_code": "NYC",
+        "destination_code": "BOS",
+        "departure_time_utc": "2026-08-15T13:00:00Z",
+        "arrival_time_utc": "2026-08-15T14:30:00Z",
+        "cabin_class": "Economy",
+        "base_fare": 100.00,
+        "currency": "USD"
+    }
+]
