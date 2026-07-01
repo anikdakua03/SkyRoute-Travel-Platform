@@ -1,0 +1,14 @@
+{
+    "hooks": {
+        "PostToolUse": [
+            {
+                "type": "command",
+                "command": "pwsh -NoProfile -File ./.github/hooks/scripts/post-tool-dotnet-signature-build.ps1",
+                "windows": {
+                    "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./.github/hooks/scripts/post-tool-dotnet-signature-build.ps1"
+                },
+                "timeout": 300
+            }
+        ]
+    }
+}
