@@ -1,0 +1,93 @@
+.lookup-page {
+    display: grid;
+    gap: 1.4rem;
+}
+
+.lookup-header,
+.lookup-card,
+.result-card {
+    border-radius: 1rem;
+    border: 1px solid var(--panel-border);
+    background: linear-gradient(145deg, rgba(24, 33, 52, 0.95), rgba(11, 18, 31, 0.95));
+    box-shadow: 0 18px 40px rgba(2, 8, 20, 0.38);
+    padding: 1.3rem;
+}
+
+.eyebrow {
+    margin: 0;
+    color: var(--accent-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.13rem;
+    font-size: 0.78rem;
+}
+
+.lookup-header h1,
+.lookup-card h2,
+.result-card h2,
+.result-card h3 {
+    margin-top: 0.5rem;
+    margin-bottom: 0.7rem;
+    color: var(--text-primary);
+}
+
+.lookup-header p,
+.lookup-card p,
+.result-card p {
+    color: var(--text-secondary);
+}
+
+.field {
+    display: grid;
+    gap: 0.4rem;
+}
+
+.field span {
+    color: var(--text-primary);
+}
+
+input {
+    border: 1px solid var(--input-border);
+    background: rgba(11, 19, 32, 0.9);
+    color: var(--text-primary);
+    border-radius: 0.65rem;
+    padding: 0.72rem 0.8rem;
+    font: inherit;
+}
+
+input:focus {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 1px;
+}
+
+.lookup-button {
+    margin-top: 0.9rem;
+    width: 100%;
+    border: 0;
+    border-radius: 0.74rem;
+    padding: 0.78rem 1rem;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    color: #221311;
+    background: linear-gradient(120deg, #f97316, #facc15);
+}
+
+.lookup-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.error-message {
+    margin-top: 0.6rem;
+    color: #fca5a5;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid var(--panel-border);
+    margin: 1rem 0;
+}
+
+.total-price {
+    color: #fcd34d;
+}

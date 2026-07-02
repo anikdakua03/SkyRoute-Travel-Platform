@@ -1,0 +1,93 @@
+<section class="booking-page" aria-label="SkyRoute booking page">
+    @if (!hasSelection()) {
+    <article class="state-card">
+        <h1>No flight selected</h1>
+        <p>
+            The booking page needs a selected flight from the search results. Return to search and choose
+            one option.
+        </p>
+        <a routerLink="/" class="back-link">Back to Search</a>
+    </article>
+    } @else {
+    <header class="booking-header">
+        <p class="eyebrow">Booking</p>
+        <h1>Confirm your flight</h1>
+    </header>
+
+    @if (flight(); as selectedFlight) {
+    <section class="booking-layout">
+        <article class="summary-card">
+            <h2>Selected Flight</h2>
+            <p class="provider">{{ selectedFlight.provider }} · {{ selectedFlight.flightNumber }}</p>
+            <p>
+                {{ originCity() }} ({{ selectedFlight.originCode }}) to {{ destinationCity() }}
+                ({{ selectedFlight.destinationCode }})
+            </p>
+            <p>
+                {{ selectedFlight.departureTimeUtc | date: 'EEE, d MMM, HH:mm' }} UTC →
+                {{ selectedFlight.arrivalTimeUtc | date: 'EEE, d MMM, HH:mm' }} UTC
+            </p>
+            <p>Duration: {{ formatDuration(selectedFlight.durationMinutes) }}</p>
+            <p>Cabin: {{ selectedFlight.cabinClass }}</p>
+
+            <hr />
+
+            <h3>Price Breakdown</h3>
+            <p>
+                Per passenger:
+                <strong>{{ selectedFlight.perPassengerPrice | currency: 'USD' : 'symbol' : '1.2-2' }}</strong>
+            </p>
+            <p>Passengers: <strong>{{ passengers() }}</strong></p>
+            <p class="total-price">
+                Total:
+                <strong>{{ totalPrice() | currency: 'USD' : 'symbol' : '1.2-2' }}</strong>
+            </p>
+        </article>
+
+        <article class="form-card">
+            <h2>Passenger Details</h2>
+
+            <form [formGroup]="bookingForm" (ngSubmit)="confirmBooking()" novalidate>
+                <label class="field">
+                    <span>Full Name</span>
+                    <input type="text" formControlName="fullName" autocomplete="name" />
+                </label>
+
+                <label class="field">
+                    <span>Email Address</span>
+                    <input type="email" formControlName="email" autocomplete="email" />
+                </label>
+
+                <label class="field">
+                    <span>{{ documentLabel() }}</span>
+                    <input type="text" formControlName="documentNumber" />
+                    <small>{{ documentHint() }}</small>
+                </label>
+
+                @if (bookingError(); as errorText) {
+                <p class="error-message" role="alert">{{ errorText }}</p>
+                }
+
+                <button type="submit" class="confirm-button" [disabled]="isSubmitting() || bookingSuccess() !== null">
+                    @if (isSubmitting()) {
+                    Confirming Booking...
+                    } @else if (bookingSuccess() !== null) {
+                    Booking Confirmed
+                    } @else {
+                    Confirm Booking
+                    }
+                </button>
+            </form>
+
+            @if (bookingSuccess(); as confirmation) {
+            <div class="success-card" role="status" aria-live="polite">
+                <h3>Booking Confirmed</h3>
+                <p>Reference: <strong>{{ confirmation.bookingReference }}</strong></p>
+                <p>Status: {{ confirmation.status }}</p>
+            </div>
+            }
+        </article>
+    </section>
+    }
+    }
+</section>
