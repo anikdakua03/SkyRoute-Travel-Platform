@@ -58,10 +58,24 @@ builder.Services.AddScoped<IBookingService, BookingService>();
 // Add logging
 builder.Services.AddLogging();
 
+// Add CORS 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+    });
+});
+
 WebApplication app = builder.Build();
 
 // Use the exception handler
 app.UseExceptionHandler();
+
+app.UseCors("AllowFrontend");
 
 if (app.Environment.IsDevelopment())
 {

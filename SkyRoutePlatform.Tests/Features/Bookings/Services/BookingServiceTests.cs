@@ -29,23 +29,6 @@ public sealed class BookingServiceTests
         _service = new BookingService(_mockRepository.Object, _mockFlightSearchService.Object, _mockDocumentValidator.Object);
     }
 
-    private static FlightResultDto CreateTestFlightDto(string flightId = "FL001")
-    {
-        return new FlightResultDto(
-            FlightId: flightId,
-            FlightNumber: "GA123",
-            Provider: "GlobalAir",
-            OriginCode: "JFK",
-            DestinationCode: "LAX",
-            DepartureTimeUtc: DateTime.UtcNow.AddDays(1),
-            ArrivalTimeUtc: DateTime.UtcNow.AddDays(1).AddHours(6),
-            DurationMinutes: 360,
-            CabinClass: "Economy",
-            PerPassengerPrice: 250.00m,
-            TotalPrice: 500.00m
-        );
-    }
-
     [Fact]
     public async Task CreateBookingAsync_WithValidRequest_ReturnsSuccessResponse()
     {
@@ -292,5 +275,22 @@ public sealed class BookingServiceTests
         Assert.False(result.IsSuccess);
         Assert.Equal(StatusCodes.Status400BadRequest, result.StatusCode);
         Assert.Contains("Booking reference is required", result.Message);
+    }
+
+    private static FlightResultDto CreateTestFlightDto(string flightId = "FL001")
+    {
+        return new FlightResultDto(
+            FlightId: flightId,
+            FlightNumber: "GA123",
+            Provider: "GlobalAir",
+            OriginCode: "JFK",
+            DestinationCode: "LAX",
+            DepartureTimeUtc: DateTime.UtcNow.AddDays(1),
+            ArrivalTimeUtc: DateTime.UtcNow.AddDays(1).AddHours(6),
+            DurationMinutes: 360,
+            CabinClass: "Economy",
+            PerPassengerPrice: 250.00m,
+            TotalPrice: 500.00m
+        );
     }
 }
