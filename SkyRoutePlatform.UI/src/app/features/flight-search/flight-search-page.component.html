@@ -1,0 +1,137 @@
+<section class="search-page" aria-label="SkyRoute flight search page">
+    <header class="hero-card">
+        <p class="eyebrow">SkyRoute</p>
+        <h1>Search, compare, and book with confidence</h1>
+        <p class="subtitle">
+            Aggregated offers from GlobalAir and BudgetWings with provider-specific pricing rules already
+            applied.
+        </p>
+    </header>
+
+    <section class="search-card" aria-labelledby="search-form-heading">
+        <h2 id="search-form-heading">Find your flight</h2>
+
+        <form [formGroup]="searchForm" (ngSubmit)="searchFlights()" novalidate>
+            <div class="grid-two">
+                <label class="field">
+                    <span>Origin</span>
+                    <select formControlName="originCode" (change)="onOriginChanged()">
+                        @for (airport of airports; track airport.code) {
+                        <option [value]="airport.code">
+                            {{ airport.city }} ({{ airport.code }}) · {{ airport.countryName }}
+                        </option>
+                        }
+                    </select>
+                </label>
+
+                <label class="field">
+                    <span>Destination</span>
+                    <select formControlName="destinationCode">
+                        @for (airport of destinationOptions(); track airport.code) {
+                        <option [value]="airport.code">
+                            {{ airport.city }} ({{ airport.code }}) · {{ airport.countryName }}
+                        </option>
+                        }
+                    </select>
+                </label>
+            </div>
+
+            <div class="grid-three">
+                <label class="field">
+                    <span>Departure Date</span>
+                    <input type="date" formControlName="departureDate" />
+                </label>
+
+                <label class="field">
+                    <span>Passengers</span>
+                    <input type="number" min="1" max="9" formControlName="passengers" />
+                </label>
+
+                <label class="field">
+                    <span>Cabin Class</span>
+                    <select formControlName="cabinClass">
+                        <option value="Economy">Economy</option>
+                        <option value="Business">Business</option>
+                        <option value="FirstClass">First Class</option>
+                    </select>
+                </label>
+            </div>
+
+            @if (searchError(); as errorText) {
+            <p class="error-message" role="alert">{{ errorText }}</p>
+            }
+
+            <button class="primary-button" type="submit" [disabled]="isLoading()">
+                @if (isLoading()) {
+                Searching flights...
+                } @else {
+                Search Flights
+                }
+            </button>
+        </form>
+    </section>
+
+    <section class="results-panel" aria-live="polite" aria-atomic="true">
+        @if (isLoading()) {
+        <div class="state-card">
+            <div class="loader" aria-hidden="true"></div>
+            <p>Running provider search and pricing normalization...</p>
+        </div>
+        } @else if (hasSearched() && resultCount() === 0) {
+        <div class="state-card">
+            <h3>No flights found</h3>
+            <p>Try another date, airport pair, or cabin class.</p>
+        </div>
+        } @else if (resultCount() > 0) {
+        <header class="results-header">
+            <h2>{{ resultCount() }} flights found</h2>
+
+            <label class="sort-field">
+                <span>Sort by</span>
+                <select [value]="selectedSort()" (change)="setSortFromEvent($event)" aria-label="Sort flight results">
+                    @for (option of sortOptions; track option.value) {
+                    <option [value]="option.value">{{ option.label }}</option>
+                    }
+                </select>
+            </label>
+        </header>
+
+        <div class="results-grid">
+            @for (flight of sortedFlights(); track flight.flightId) {
+            <article class="flight-card">
+                <header>
+                    <p class="provider">{{ flight.provider }}</p>
+                    <p class="flight-number">{{ flight.flightNumber }}</p>
+                </header>
+
+                <div class="route">
+                    <p>
+                        <strong>{{ flight.originCode }}</strong> to <strong>{{ flight.destinationCode }}</strong>
+                    </p>
+                    <p>
+                        {{ flight.departureTimeUtc | date: 'EEE, d MMM, HH:mm' }} UTC →
+                        {{ flight.arrivalTimeUtc | date: 'EEE, d MMM, HH:mm' }} UTC
+                    </p>
+                </div>
+
+                <div class="meta">
+                    <p>Duration: {{ formatDuration(flight.durationMinutes) }}</p>
+                    <p>Cabin: {{ flight.cabinClass }}</p>
+                </div>
+
+                <div class="pricing">
+                    <p class="total-price">{{ flight.totalPrice | currency: 'USD' : 'symbol' : '1.2-2' }} total</p>
+                    <p class="secondary-price">
+                        {{ flight.perPassengerPrice | currency: 'USD' : 'symbol' : '1.2-2' }} per passenger
+                    </p>
+                </div>
+
+                <button class="secondary-button" type="button" (click)="bookFlight(flight)">
+                    Select Flight
+                </button>
+            </article>
+            }
+        </div>
+        }
+    </section>
+</section>
