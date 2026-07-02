@@ -1,6 +1,6 @@
-namespace SkyRoutePlatform.API.Features.Bookings.Repositories;
-
 using SkyRoutePlatform.API.Shared.Models;
+
+namespace SkyRoutePlatform.API.Features.Bookings.Repositories;
 
 /// <summary>
 /// Repository abstraction for booking persistence operations.

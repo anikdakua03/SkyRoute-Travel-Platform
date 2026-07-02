@@ -1,7 +1,7 @@
-namespace SkyRoutePlatform.API.Features.Bookings.Services;
-
 using SkyRoutePlatform.API.Features.Bookings.Contracts;
 using SkyRoutePlatform.API.Shared.Responses;
+
+namespace SkyRoutePlatform.API.Features.Bookings.Services;
 
 /// <summary>
 /// Interface for booking operations.

@@ -1,6 +1,6 @@
-namespace SkyRoutePlatform.API.Features.Bookings.Contracts;
-
 using SkyRoutePlatform.API.Shared.Models;
+
+namespace SkyRoutePlatform.API.Features.Bookings.Contracts;
 
 /// <summary>
 /// Request contract for creating a booking.

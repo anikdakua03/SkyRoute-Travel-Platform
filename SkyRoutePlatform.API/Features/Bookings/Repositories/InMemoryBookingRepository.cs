@@ -1,6 +1,6 @@
-namespace SkyRoutePlatform.API.Features.Bookings.Repositories;
-
 using SkyRoutePlatform.API.Shared.Models;
+
+namespace SkyRoutePlatform.API.Features.Bookings.Repositories;
 
 /// <summary>
 /// In-memory implementation of IBookingRepository for local development and testing.
