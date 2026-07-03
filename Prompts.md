@@ -133,3 +133,23 @@ Lets now create the project root `README.md` in such a way that it covers follow
 ```
 
 ---
+
+```md
+There is one requirement , it is like :
+- WE should take no of passesnger and accordingly need to get the details from booking
+- there will be one primary passenger for that email is manadtory field
+- for other passengers email field is not required 
+- also until all the passenger details are entered, booking button must be disabled
+
+Lets implement these req in the UI only as of now
+```
+
+---
+
+```md
+Next lets incorporate the changes in API side also to handle the passenger details accordingly coming from UI , also API side we must add the validations as well like 
+- primary passenger must have email , for others email are not mandatory
+
+```
+
+---
