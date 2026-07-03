@@ -1,4 +1,4 @@
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe, formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -170,7 +170,9 @@ export class FlightSearchPageComponent {
     }
 
     private getDefaultDepartureDate(): string {
-        return '2026-08-15';
+        const today = new Date();
+        const defaultDateString = formatDate(today, 'yyyy-MM-dd', 'en-US');
+        return defaultDateString;
     }
 
     private getErrorMessage(error: unknown): string {

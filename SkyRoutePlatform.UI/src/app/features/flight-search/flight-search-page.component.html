@@ -45,6 +45,15 @@
                 <label class="field">
                     <span>Passengers</span>
                     <input type="number" min="1" max="9" formControlName="passengers" />
+                    @let passengerControl = searchForm.controls.passengers;
+
+                    @if (passengerControl.errors?.['min']) {
+                    <p class="error-message" role="alert">Minimum is 1 passenger atleast.</p>
+                    }
+
+                    @if (passengerControl.errors?.['max']) {
+                    <p class="error-message" role="alert">Maximum is 9 passenger allowed.</p>
+                    }
                 </label>
 
                 <label class="field">
@@ -61,7 +70,7 @@
             <p class="error-message" role="alert">{{ errorText }}</p>
             }
 
-            <button class="primary-button" type="submit" [disabled]="isLoading()">
+            <button class="primary-button" type="submit" [disabled]="isLoading() || searchForm.valid === false">
                 @if (isLoading()) {
                 Searching flights...
                 } @else {
@@ -71,6 +80,7 @@
         </form>
     </section>
 
+    @if (isLoading() || hasSearched() && resultCount() === 0 || resultCount() > 0) {
     <section class="results-panel" aria-live="polite" aria-atomic="true">
         @if (isLoading()) {
         <div class="state-card">
@@ -134,4 +144,5 @@
         </div>
         }
     </section>
+    }
 </section>
