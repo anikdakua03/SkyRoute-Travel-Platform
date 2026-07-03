@@ -33,13 +33,54 @@ public sealed class BookingService : IBookingService
     /// Creates a new booking with full validation.
     /// Returns ApiResponse with success or error details.
     /// </summary>
-    public async Task<ApiResponse<CreateBookingResponse>> CreateBookingAsync(string flightId, string cabinClass, int passengers, string fullName, string email, string documentType, string documentNumber, CancellationToken cancellationToken = default)
+    public async Task<ApiResponse<CreateBookingResponse>> CreateBookingAsync(string flightId, string cabinClass, int passengers, IReadOnlyList<Contracts.PassengerDto> passengersDetails, CancellationToken cancellationToken = default)
     {
         // ===== FIELD VALIDATION =====
-        string? fieldValidationError = ValidateBookingRequestFields(flightId, cabinClass, passengers, fullName, email, documentType, documentNumber);
-        if (fieldValidationError is not null)
+        if (string.IsNullOrWhiteSpace(flightId))
         {
-            return ApiResponse<CreateBookingResponse>.Failure(StatusCodes.Status400BadRequest, fieldValidationError);
+            return ApiResponse<CreateBookingResponse>.Failure(StatusCodes.Status400BadRequest, "Flight ID is required.");
+        }
+
+        if (string.IsNullOrWhiteSpace(cabinClass))
+        {
+            return ApiResponse<CreateBookingResponse>.Failure(StatusCodes.Status400BadRequest, "Cabin class is required.");
+        }
+
+        if (passengers < 1 || passengers > 9)
+        {
+            return ApiResponse<CreateBookingResponse>.Failure(StatusCodes.Status400BadRequest, "Passengers must be between 1 and 9.");
+        }
+
+        if (passengersDetails is null || passengersDetails.Count != passengers)
+        {
+            return ApiResponse<CreateBookingResponse>.Failure(StatusCodes.Status400BadRequest, "Passengers details must be provided for each passenger.");
+        }
+
+        // basic per-passenger checks
+        for (int i = 0; i < passengersDetails.Count; i++)
+        {
+            var p = passengersDetails[i];
+            if (string.IsNullOrWhiteSpace(p.FullName))
+            {
+                return ApiResponse<CreateBookingResponse>.Failure(StatusCodes.Status400BadRequest, $"Full name is required for passenger {i + 1}.");
+            }
+
+            if (string.IsNullOrWhiteSpace(p.DocumentType))
+            {
+                return ApiResponse<CreateBookingResponse>.Failure(StatusCodes.Status400BadRequest, $"Document type is required for passenger {i + 1}.");
+            }
+
+            if (string.IsNullOrWhiteSpace(p.DocumentNumber))
+            {
+                return ApiResponse<CreateBookingResponse>.Failure(StatusCodes.Status400BadRequest, $"Document number is required for passenger {i + 1}.");
+            }
+        }
+
+        // primary passenger (first) must have a valid email
+        var primary = passengersDetails[0];
+        if (string.IsNullOrWhiteSpace(primary.Email) || !primary.Email.Contains("@"))
+        {
+            return ApiResponse<CreateBookingResponse>.Failure(StatusCodes.Status400BadRequest, "Primary passenger must have a valid email address.");
         }
 
         // ===== ENUM PARSING =====
@@ -51,11 +92,12 @@ public sealed class BookingService : IBookingService
             );
         }
 
-        if (!Enum.TryParse<DocumentType>(documentType, ignoreCase: true, out DocumentType parsedDocumentType))
+        // parse primary passenger document type
+        if (!Enum.TryParse<DocumentType>(primary.DocumentType, ignoreCase: true, out DocumentType parsedDocumentType))
         {
             return ApiResponse<CreateBookingResponse>.Failure(
                 StatusCodes.Status400BadRequest,
-                $"Invalid document type '{documentType}'. Must be one of: PassportNumber, NationalId."
+                $"Invalid document type '{primary.DocumentType}' for primary passenger. Must be one of: PassportNumber, NationalId."
             );
         }
 
@@ -91,10 +133,10 @@ public sealed class BookingService : IBookingService
             );
         }
 
-        // Validate document for the route
+        // Validate primary passenger document for the route
         string? documentValidationError = _documentValidator.ValidateDocumentForRoute(
             parsedDocumentType,
-            documentNumber,
+            primary.DocumentNumber,
             flightDto.OriginCode,
             flightDto.DestinationCode
         );
@@ -109,6 +151,13 @@ public sealed class BookingService : IBookingService
 
         // ===== CREATE AND PERSIST BOOKING =====
         string bookingReference = GenerateBookingReference();
+
+        var passengerModels = passengersDetails.Select(p => new Passenger(
+            FullName: p.FullName,
+            Email: p.Email,
+            DocumentType: Enum.Parse<DocumentType>(p.DocumentType, ignoreCase: true),
+            DocumentNumber: p.DocumentNumber
+        )).ToList().AsReadOnly();
 
         Booking booking = new(
             BookingReference: bookingReference,
@@ -127,10 +176,11 @@ public sealed class BookingService : IBookingService
                 Currency: "USD"
             ),
             Passengers: passengers,
-            FullName: fullName,
-            Email: email,
+            FullName: primary.FullName,
+            Email: primary.Email ?? string.Empty,
             DocumentType: parsedDocumentType,
-            DocumentNumber: documentNumber,
+            DocumentNumber: primary.DocumentNumber,
+            PassengerDetails: passengerModels,
             CreatedAtUtc: DateTime.UtcNow
         );
 
@@ -171,6 +221,13 @@ public sealed class BookingService : IBookingService
         }
 
         // ===== RETURN RESPONSE =====
+        var passengerInfos = booking.PassengerDetails.Select(p => new GetBookingResponse.PassengerInfo(
+            FullName: p.FullName,
+            Email: p.Email,
+            DocumentType: p.DocumentType.ToString(),
+            DocumentNumber: p.DocumentNumber
+        )).ToList().AsReadOnly();
+
         GetBookingResponse response = new(
             BookingReference: booking.BookingReference,
             FullName: booking.FullName,
@@ -188,7 +245,8 @@ public sealed class BookingService : IBookingService
                 CabinClass: booking.SelectedFlight.CabinClass.ToString()
             ),
             TotalPrice: booking.SelectedFlight.TotalPrice,
-            Currency: booking.SelectedFlight.Currency
+            Currency: booking.SelectedFlight.Currency,
+            PassengerDetails: passengerInfos
         );
 
         return ApiResponse<GetBookingResponse>.Success(response);

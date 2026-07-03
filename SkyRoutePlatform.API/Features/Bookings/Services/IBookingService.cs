@@ -22,7 +22,7 @@ public interface IBookingService
     /// <param name="documentNumber">Document number/value</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>ApiResponse with CreateBookingResponse on success or error details on failure</returns>
-    Task<ApiResponse<CreateBookingResponse>> CreateBookingAsync(string flightId, string cabinClass, int passengers, string fullName, string email, string documentType, string documentNumber, CancellationToken cancellationToken = default);
+    Task<ApiResponse<CreateBookingResponse>> CreateBookingAsync(string flightId, string cabinClass, int passengers, IReadOnlyList<Contracts.PassengerDto> passengersDetails, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Retrieves a booking by its reference code.

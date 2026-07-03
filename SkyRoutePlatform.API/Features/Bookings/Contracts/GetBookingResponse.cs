@@ -11,7 +11,7 @@ namespace SkyRoutePlatform.API.Features.Bookings.Contracts;
 /// <param name="Flight">Flight information for the booking</param>
 /// <param name="TotalPrice">Total price for all passengers</param>
 /// <param name="Currency">Currency code (e.g., "USD")</param>
-public sealed record GetBookingResponse(string BookingReference, string FullName, string Email, int Passengers, string Status, GetBookingResponse.FlightInfo Flight, decimal TotalPrice, string Currency)
+public sealed record GetBookingResponse(string BookingReference, string FullName, string Email, int Passengers, string Status, GetBookingResponse.FlightInfo Flight, decimal TotalPrice, string Currency, IReadOnlyList<GetBookingResponse.PassengerInfo> PassengerDetails)
 {
     /// <summary>
     /// Flight information included in the booking.
@@ -25,4 +25,9 @@ public sealed record GetBookingResponse(string BookingReference, string FullName
     /// <param name="DestinationCode">Destination airport code</param>
     /// <param name="CabinClass">Cabin class for the booking</param>
     public sealed record FlightInfo(string FlightId, string FlightNumber, string Provider, DateTime DepartureTimeUtc, DateTime ArrivalTimeUtc, string OriginCode, string DestinationCode, string CabinClass);
+
+    /// <summary>
+    /// Passenger information included in the booking.
+    /// </summary>
+    public sealed record PassengerInfo(string FullName, string? Email, string DocumentType, string DocumentNumber);
 }

@@ -23,10 +23,7 @@ public sealed class CreateBookingEndpoint
             request.FlightId,
             request.CabinClass,
             request.Passengers,
-            request.FullName,
-            request.Email,
-            request.DocumentType,
-            request.DocumentNumber,
+            request.PassengersDetails,
             cancellationToken
         );
 
