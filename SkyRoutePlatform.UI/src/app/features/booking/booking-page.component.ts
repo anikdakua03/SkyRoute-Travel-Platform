@@ -1,7 +1,7 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, computed, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AIRPORTS_BY_CODE, isInternationalRoute } from '../../core/data/airports';
 import {
@@ -33,10 +33,10 @@ export class BookingPageComponent {
     protected readonly isSubmitting = signal(false);
 
     protected readonly bookingForm = this.formBuilder.nonNullable.group({
-        fullName: ['', [Validators.required, Validators.minLength(3)]],
-        email: ['', [Validators.required, Validators.email]],
-        documentNumber: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(12)]]
-    });
+        passengers: this.formBuilder.nonNullable.array([])
+    }) as FormGroup;
+
+    protected readonly passengerIndexes = computed(() => Array.from({ length: this.passengers() }, (_, i) => i));
 
     protected readonly hasSelection = computed(() => this.flight() !== null && this.context() !== null);
 
@@ -103,7 +103,25 @@ export class BookingPageComponent {
         if (selectedFlight && bookingContext) {
             this.flight.set(selectedFlight);
             this.context.set(bookingContext);
+            this.buildPassengerForm(bookingContext.passengers);
         }
+    }
+
+    private buildPassengerForm(passengerCount: number): void {
+        const groups = Array.from({ length: Math.max(1, passengerCount) }, (_, idx) =>
+            this.formBuilder.nonNullable.group({
+                fullName: ['', [Validators.required, Validators.minLength(3)]],
+                email: ['', idx === 0 ? [Validators.required, Validators.email] : [Validators.email]],
+                documentNumber: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(12)]]
+            })
+        );
+
+        const arr = this.formBuilder.nonNullable.array(groups) as FormArray;
+        this.bookingForm.setControl('passengers', arr);
+    }
+
+    protected get passengerControls(): FormArray {
+        return this.bookingForm.controls['passengers'] as FormArray;
     }
 
     protected confirmBooking(): void {
@@ -124,14 +142,21 @@ export class BookingPageComponent {
 
         this.isSubmitting.set(true);
 
+        const passengersPayload = this.passengerControls.controls.map((ctrl) => {
+            const group = ctrl as FormGroup;
+            return {
+                fullName: String(group.controls['fullName'].value).trim(),
+                email: (group.controls['email'].value || null) as string | null,
+                documentType: this.documentType(),
+                documentNumber: String(group.controls['documentNumber'].value).trim()
+            };
+        });
+
         const payload: CreateBookingRequest = {
             flightId: selectedFlight.flightId,
             cabinClass: selectedFlight.cabinClass,
             passengers: bookingContext.passengers,
-            fullName: this.bookingForm.controls.fullName.value.trim(),
-            email: this.bookingForm.controls.email.value.trim(),
-            documentType: this.documentType(),
-            documentNumber: this.bookingForm.controls.documentNumber.value.trim()
+            passengersDetails: passengersPayload
         };
 
         this.bookingsService.createBooking(payload).subscribe({

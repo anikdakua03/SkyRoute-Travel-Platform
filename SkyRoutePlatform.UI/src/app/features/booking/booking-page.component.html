@@ -47,28 +47,44 @@
         <article class="form-card">
             <h2>Passenger Details</h2>
 
+
             <form [formGroup]="bookingForm" (ngSubmit)="confirmBooking()" novalidate>
-                <label class="field">
-                    <span>Full Name</span>
-                    <input type="text" formControlName="fullName" autocomplete="name" />
-                </label>
+                <div formArrayName="passengers">
+                    @for (idx of passengerIndexes(); track idx) {
+                    <fieldset class="passenger-block" [attr.aria-label]="'Passenger ' + (idx + 1)">
+                        <legend>Passenger {{ idx + 1 }}</legend>
+                        <div [formGroupName]="idx">
+                            <label class="field">
+                                <span>Full Name</span>
+                                <input type="text" formControlName="fullName" autocomplete="name" />
+                            </label>
 
-                <label class="field">
-                    <span>Email Address</span>
-                    <input type="email" formControlName="email" autocomplete="email" />
-                </label>
+                            <label class="field">
+                                <span>
+                                    Email Address
+                                    @if (idx === 0) {
+                                    <small> (primary — required)</small>
+                                    }
+                                </span>
+                                <input type="email" formControlName="email" autocomplete="email" />
+                            </label>
 
-                <label class="field">
-                    <span>{{ documentLabel() }}</span>
-                    <input type="text" formControlName="documentNumber" />
-                    <small>{{ documentHint() }}</small>
-                </label>
+                            <label class="field">
+                                <span>{{ documentLabel() }}</span>
+                                <input type="text" formControlName="documentNumber" />
+                                <small>{{ documentHint() }}</small>
+                            </label>
+                        </div>
+                    </fieldset>
+                    }
+                </div>
 
                 @if (bookingError(); as errorText) {
                 <p class="error-message" role="alert">{{ errorText }}</p>
                 }
 
-                <button type="submit" class="confirm-button" [disabled]="isSubmitting() || bookingSuccess() !== null">
+                <button type="submit" class="confirm-button"
+                    [disabled]="isSubmitting() || bookingSuccess() !== null || bookingForm.invalid">
                     @if (isSubmitting()) {
                     Confirming Booking...
                     } @else if (bookingSuccess() !== null) {

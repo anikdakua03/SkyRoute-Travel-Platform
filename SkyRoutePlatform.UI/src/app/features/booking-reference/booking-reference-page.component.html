@@ -15,51 +15,62 @@
             </label>
 
             @if (lookupError(); as errorText) {
-                <p class="error-message" role="alert">{{ errorText }}</p>
+            <p class="error-message" role="alert">{{ errorText }}</p>
             }
 
             <button type="submit" class="lookup-button" [disabled]="isLoading()">
                 @if (isLoading()) {
-                    Searching...
+                Searching...
                 } @else {
-                    Get Booking Details
+                Get Booking Details
                 }
             </button>
         </form>
     </section>
 
     @if (hasResult() && bookingResult(); as booking) {
-        <section class="result-card" aria-live="polite">
-            <h2>Booking Found</h2>
-            <p><strong>Reference:</strong> {{ booking.bookingReference }}</p>
-            <p><strong>Status:</strong> {{ booking.status }}</p>
-            <p><strong>Passenger:</strong> {{ booking.fullName }}</p>
-            <p><strong>Email:</strong> {{ booking.email }}</p>
-            <p><strong>Passengers:</strong> {{ booking.passengers }}</p>
+    <section class="result-card" aria-live="polite">
+        <h2>Booking Found</h2>
+        <p><strong>Reference:</strong> {{ booking.bookingReference }}</p>
+        <p><strong>Status:</strong> {{ booking.status }}</p>
+        <p><strong>Passengers:</strong> {{ booking.passengers }}</p>
 
-            <hr />
+        <h3>Passengers</h3>
+        <div class="passenger-list">
+            @for (passenger of booking.passengerDetails; track passenger.documentNumber; let idx = $index) {
+            <article class="passenger-item">
+                <p class="passenger-title">Passenger {{ idx + 1 }}</p>
+                <p><strong>Name:</strong> {{ passenger.fullName }}</p>
+                <p><strong>Email:</strong> {{ passenger.email || 'Not provided' }}</p>
+                <p><strong>Document Type:</strong> {{ passenger.documentType }}</p>
+                <p><strong>Document Number:</strong> {{ passenger.documentNumber }}</p>
+            </article>
+            }
+        </div>
 
-            <h3>Flight</h3>
-            <p><strong>Provider:</strong> {{ booking.flight.provider }}</p>
-            <p><strong>Flight Number:</strong> {{ booking.flight.flightNumber }}</p>
-            <p><strong>Route:</strong> {{ booking.flight.originCode }} to {{ booking.flight.destinationCode }}</p>
-            <p><strong>Cabin:</strong> {{ booking.flight.cabinClass }}</p>
-            <p>
-                <strong>Departure:</strong>
-                {{ booking.flight.departureTimeUtc | date: 'EEE, d MMM, HH:mm' }} UTC
-            </p>
-            <p>
-                <strong>Arrival:</strong>
-                {{ booking.flight.arrivalTimeUtc | date: 'EEE, d MMM, HH:mm' }} UTC
-            </p>
-            <p>
-                <strong>Duration:</strong>
-                {{ formatDuration(booking.flight.departureTimeUtc, booking.flight.arrivalTimeUtc) }}
-            </p>
-            <p class="total-price">
-                <strong>Total Price:</strong>
-                {{ booking.totalPrice | currency: booking.currency : 'symbol' : '1.2-2' }}
-            </p>
-        </section>
+        <hr />
+
+        <h3>Flight</h3>
+        <p><strong>Provider:</strong> {{ booking.flight.provider }}</p>
+        <p><strong>Flight Number:</strong> {{ booking.flight.flightNumber }}</p>
+        <p><strong>Route:</strong> {{ booking.flight.originCode }} to {{ booking.flight.destinationCode }}</p>
+        <p><strong>Cabin:</strong> {{ booking.flight.cabinClass }}</p>
+        <p>
+            <strong>Departure:</strong>
+            {{ booking.flight.departureTimeUtc | date: 'EEE, d MMM, HH:mm' }} UTC
+        </p>
+        <p>
+            <strong>Arrival:</strong>
+            {{ booking.flight.arrivalTimeUtc | date: 'EEE, d MMM, HH:mm' }} UTC
+        </p>
+        <p>
+            <strong>Duration:</strong>
+            {{ formatDuration(booking.flight.departureTimeUtc, booking.flight.arrivalTimeUtc) }}
+        </p>
+        <p class="total-price">
+            <strong>Total Price:</strong>
+            {{ booking.totalPrice | currency: booking.currency : 'symbol' : '1.2-2' }}
+        </p>
+    </section>
     }
 </section>

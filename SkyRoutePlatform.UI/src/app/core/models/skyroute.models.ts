@@ -40,10 +40,12 @@ export interface CreateBookingRequest {
     flightId: string;
     cabinClass: string;
     passengers: number;
-    fullName: string;
-    email: string;
-    documentType: DocumentType;
-    documentNumber: string;
+    passengersDetails: Array<{
+        fullName: string;
+        email?: string | null;
+        documentType: DocumentType;
+        documentNumber: string;
+    }>;
 }
 
 export interface CreateBookingResponse {
@@ -60,6 +62,14 @@ export interface GetBookingResponse {
     flight: GetBookingFlightInfo;
     totalPrice: number;
     currency: string;
+    passengerDetails: GetBookingPassengerInfo[];
+}
+
+export interface GetBookingPassengerInfo {
+    fullName: string;
+    email?: string | null;
+    documentType: string;
+    documentNumber: string;
 }
 
 export interface GetBookingFlightInfo {
