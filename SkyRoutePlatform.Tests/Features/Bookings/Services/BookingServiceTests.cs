@@ -50,14 +50,16 @@ public sealed class BookingServiceTests
             .ReturnsAsync(It.IsAny<Booking>());
 
         // Act
+        var passengers = new[] {
+            new PassengerDto("John Doe", "john@example.com", "PassportNumber", "ABC123456"),
+            new PassengerDto("Jane Doe", null, "PassportNumber", "XYZ987654")
+        };
+
         ApiResponse<CreateBookingResponse> result = await _service.CreateBookingAsync(
             "FL001",
             "Economy",
             2,
-            "John Doe",
-            "john@example.com",
-            "PassportNumber",
-            "ABC123456"
+            passengers
         );
 
         // Assert
@@ -80,14 +82,13 @@ public sealed class BookingServiceTests
         // Empty flight ID
 
         // Act
+        var passengersBad = new[] { new PassengerDto("John Doe", "john@example.com", "PassportNumber", "ABC123456"), new PassengerDto("Jane Doe", null, "PassportNumber", "XYZ987654") };
+
         ApiResponse<CreateBookingResponse> result = await _service.CreateBookingAsync(
             "",
             "Economy",
             2,
-            "John Doe",
-            "john@example.com",
-            "PassportNumber",
-            "ABC123456"
+            passengersBad
         );
 
         // Assert
@@ -108,14 +109,13 @@ public sealed class BookingServiceTests
         // Invalid cabin class
 
         // Act
+        var passengersInvalidCabin = new[] { new PassengerDto("John Doe", "john@example.com", "PassportNumber", "ABC123456"), new PassengerDto("Jane Doe", null, "PassportNumber", "XYZ987654") };
+
         ApiResponse<CreateBookingResponse> result = await _service.CreateBookingAsync(
             "FL001",
             "InvalidClass",
             2,
-            "John Doe",
-            "john@example.com",
-            "PassportNumber",
-            "ABC123456"
+            passengersInvalidCabin
         );
 
         // Assert
@@ -143,14 +143,13 @@ public sealed class BookingServiceTests
 
         // Requesting Business but flight only has Economy
         // Act
+        var passengersCabinMismatch = new[] { new PassengerDto("John Doe", "john@example.com", "PassportNumber", "ABC123456"), new PassengerDto("Jane Doe", null, "PassportNumber", "XYZ987654") };
+
         ApiResponse<CreateBookingResponse> result = await _service.CreateBookingAsync(
             "FL001",
             "Business",
             2,
-            "John Doe",
-            "john@example.com",
-            "PassportNumber",
-            "ABC123456"
+            passengersCabinMismatch
         );
 
         // Assert
@@ -176,14 +175,13 @@ public sealed class BookingServiceTests
             .Returns("Passport not valid for this route");
 
         // Act
+        var passengersInvalidDoc = new[] { new PassengerDto("John Doe", "john@example.com", "PassportNumber", "ABC123456"), new PassengerDto("Jane Doe", null, "PassportNumber", "XYZ987654") };
+
         ApiResponse<CreateBookingResponse> result = await _service.CreateBookingAsync(
             "FL001",
             "Economy",
             2,
-            "John Doe",
-            "john@example.com",
-            "PassportNumber",
-            "ABC123456"
+            passengersInvalidDoc
         );
 
         // Assert
@@ -221,6 +219,7 @@ public sealed class BookingServiceTests
             Email: "john@example.com",
             DocumentType: DocumentType.PassportNumber,
             DocumentNumber: "ABC123456",
+            PassengerDetails: new[] { new Passenger("John Doe", "john@example.com", DocumentType.PassportNumber, "ABC123456"), new Passenger("Jane Doe", null, DocumentType.PassportNumber, "XYZ987654") },
             CreatedAtUtc: DateTime.UtcNow
         );
 
@@ -238,6 +237,11 @@ public sealed class BookingServiceTests
         Assert.Equal("SKY-TEST01", result.Data.BookingReference);
         Assert.Equal("John Doe", result.Data.FullName);
         Assert.Equal("Confirmed", result.Data.Status);
+        Assert.Equal(2, result.Data.PassengerDetails.Count);
+        Assert.Equal("John Doe", result.Data.PassengerDetails[0].FullName);
+        Assert.Equal("john@example.com", result.Data.PassengerDetails[0].Email);
+        Assert.Equal("Jane Doe", result.Data.PassengerDetails[1].FullName);
+        Assert.Null(result.Data.PassengerDetails[1].Email);
     }
 
     [Fact]

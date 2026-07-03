@@ -223,6 +223,7 @@ public sealed class InMemoryBookingRepositoryTests
             Email: "jane.smith@company.com",
             DocumentType: DocumentType.NationalId,
             DocumentNumber: "ID-987654321",
+            PassengerDetails: new[] { new Passenger("Jane Smith Johnson", "jane.smith@company.com", DocumentType.NationalId, "ID-987654321"), new Passenger("Passenger 2", null, DocumentType.NationalId, "ID-222222222"), new Passenger("Passenger 3", null, DocumentType.NationalId, "ID-333333333") },
             CreatedAtUtc: DateTime.UtcNow
         );
 
@@ -276,6 +277,7 @@ public sealed class InMemoryBookingRepositoryTests
             Email: "alice@example.com",
             DocumentType: DocumentType.PassportNumber,
             DocumentNumber: "PP999888777",
+            PassengerDetails: new[] { new Passenger("Alice Wonder", "alice@example.com", DocumentType.PassportNumber, "PP999888777"), new Passenger("Bob Wonder", null, DocumentType.PassportNumber, "PP111222333") },
             CreatedAtUtc: DateTime.UtcNow
         );
 
@@ -320,6 +322,7 @@ public sealed class InMemoryBookingRepositoryTests
             Email: "john@example.com",
             DocumentType: DocumentType.PassportNumber,
             DocumentNumber: "ABC123456",
+            PassengerDetails: new[] { new Passenger("John Doe", "john@example.com", DocumentType.PassportNumber, "ABC123456"), new Passenger("Jane Doe", null, DocumentType.PassportNumber, "XYZ987654") },
             CreatedAtUtc: DateTime.UtcNow
         );
     }
